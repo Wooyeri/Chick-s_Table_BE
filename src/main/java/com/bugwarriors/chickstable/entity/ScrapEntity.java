@@ -1,3 +1,11 @@
+package com.bugwarriors.chickstable.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table(name = "scrap")
 @Data
@@ -15,5 +23,5 @@ public class ScrapEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private UserEntity userEntity;
+    private UsersEntity users;
 }

@@ -1,3 +1,5 @@
+package com.bugwarriors.chickstable.interceptor;
+
 import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
