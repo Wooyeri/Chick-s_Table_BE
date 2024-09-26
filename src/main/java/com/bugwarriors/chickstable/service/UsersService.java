@@ -11,6 +11,7 @@ import com.bugwarriors.chickstable.entity.UsersEntity;
 import com.bugwarriors.chickstable.repository.DiseaseRepository;
 import com.bugwarriors.chickstable.repository.MediaRepository;
 import com.bugwarriors.chickstable.repository.UsersRepository;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -91,14 +92,14 @@ public class UsersService {
         return responseDTO;
     }
 
+    @Transactional
     public int updateUserInfo(UsersEntity users, UsersInfoRequestDTO requestDto, MultipartFile file) {
         try {
-            log.info("nickname: {}", requestDto.getNickname());
-            log.info("disease: {}", requestDto.getDiseases());
             // 유저 상세 정보 수정
-            if (!requestDto.getNickname().isBlank()) {
+            if (requestDto != null && !requestDto.getNickname().isBlank()) {
                 users.setNickname(requestDto.getNickname());
             }
+
             MediaEntity media = fileUtils.parseMediaInfo(users, file);
             if (media != null) {
                 mediaRepository.save(media);
@@ -110,7 +111,7 @@ public class UsersService {
                 diseaseRepository.deleteAllByUsers(users);
             }
 
-            if(!requestDto.getDiseases().isEmpty()) {
+            if(requestDto != null && !requestDto.getDiseases().isEmpty()) {
                 List<UsersDiseaseDTO> diseaseList = requestDto.getDiseases();
                 for (UsersDiseaseDTO disease : diseaseList) {
                     DiseaseEntity diseaseEntity = new DiseaseEntity();

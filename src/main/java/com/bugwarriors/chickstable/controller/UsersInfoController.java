@@ -48,7 +48,7 @@ public class UsersInfoController {
     public ResponseEntity<?> updateUserInfo(
             @AuthUser UsersEntity users,
             @PathVariable(value = "id") Long userId,
-            @RequestPart(value = "data") UsersInfoRequestDTO requestDto,
+            @RequestPart(value = "data", required = false) UsersInfoRequestDTO requestDto,
             @RequestPart(value = "file", required = false) MultipartFile file
     ) {
         if (!usersService.existsById(userId)) {

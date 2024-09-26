@@ -4,12 +4,16 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.ErrorResponse;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -20,21 +24,7 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException {
-
-        String errorMessage = null;
-
-        if (exception instanceof BadCredentialsException) {
-            errorMessage = "아이디와 비밀번호를 확인해주세요.";
-        } else if (exception instanceof InternalAuthenticationServiceException) {
-            errorMessage = "내부 시스템 문제로 로그인할 수 없습니다. 관리자에게 문의하세요.";
-        } else if (exception instanceof UsernameNotFoundException) {
-            errorMessage = "존재하지 않는 계정입니다.";
-        } else {
-            errorMessage = "알 수 없는 오류입니다.";
-        }
-
-        errorMessage = URLEncoder.encode(errorMessage, "UTF-8");
-        // setDefaultFailureUrl("/login?error=" + errorMessage);
-        super.onAuthenticationFailure(request, response, exception);
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); //401 인증 실패
+        response.getWriter().write("아이디 혹은 비밀번호가 올바르지 않습니다.");
     }
 }

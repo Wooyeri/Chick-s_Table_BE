@@ -54,15 +54,16 @@ public class FileUtilsForLocal {
 			dir.mkdirs();
 		}
 
-		String contentType = file.getContentType();
+		String fileName = file.getOriginalFilename();
+		String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
 
 		// Content-Type 이미지 파일인 경우에 한하여 지정된 확장자로 저장되도록 설정
 		String fileExtension = "";
-		if (contentType.contains("jpeg")) {
+		if (extension.contains("jpeg") || extension.contains("jpg")) {
 			fileExtension = ".jpg";
-		} else if (contentType.contains("png")) {
+		} else if (extension.contains("png")) {
 			fileExtension = ".png";
-		} else if (contentType.contains("gif")) {
+		} else if (extension.contains("gif")) {
 			fileExtension = ".gif";
 		}
 
