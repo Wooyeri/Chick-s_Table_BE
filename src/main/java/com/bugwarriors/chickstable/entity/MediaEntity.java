@@ -17,7 +17,11 @@ public class MediaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 700)
     private String storedFilePath;
+
+    @Column(length = 700)
+    private String originalFileName;
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")

@@ -1,6 +1,7 @@
 package com.bugwarriors.chickstable.service;
 
 import com.bugwarriors.chickstable.common.FileUtilsForLocal;
+import com.bugwarriors.chickstable.common.FileUtilsForS3;
 import com.bugwarriors.chickstable.dto.JoinRequestDTO;
 import com.bugwarriors.chickstable.dto.UsersDiseaseDTO;
 import com.bugwarriors.chickstable.dto.UsersInfoRequestDTO;
@@ -34,7 +35,7 @@ public class UsersService {
     private DiseaseRepository diseaseRepository;
 
     @Autowired
-    private FileUtilsForLocal fileUtils;
+    private FileUtilsForS3 fileUtils;
 
     @Autowired
     private BCryptPasswordEncoder encoder;
@@ -125,7 +126,7 @@ public class UsersService {
             usersRepository.save(users);
             return 1;
         } catch (Exception e) {
-            log.info("Exception: {}", e.getMessage());
+            log.error(e.toString());
             return -1;
         }
     }

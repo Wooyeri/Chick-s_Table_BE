@@ -72,6 +72,7 @@ public class FileUtilsForLocal {
 
 		// 파일 정보를 리스트에 저장
 		mediaEntity.setStoredFilePath(storedDir + "\\" + storedFileName);
+		mediaEntity.setOriginalFileName(storedFileName);
 		mediaEntity.setUsers(users);
 
 		// 파일 저장
