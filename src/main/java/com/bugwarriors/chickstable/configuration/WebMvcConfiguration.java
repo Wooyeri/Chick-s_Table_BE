@@ -32,7 +32,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 			.addMapping("/**")
 			.allowedOrigins("*") // 프론트엔드 요청 수락
 			.allowedMethods("GET", "POST", "DELETE", "PATCH")
-			.exposedHeaders("token", "username")
+			.exposedHeaders("token", "id")
 			.allowedHeaders("Authorization", "Content-Type");
 	}
 

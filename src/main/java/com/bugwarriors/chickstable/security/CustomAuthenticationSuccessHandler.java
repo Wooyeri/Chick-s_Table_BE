@@ -35,6 +35,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
 		// 응답 헤더에 생성한 토큰을 설정
 		response.setHeader("token", jwtToken); // JWT 값
-		response.setHeader("username", userEntity.getId().toString()); // Users: ID 값(PK값)
+		response.setHeader("id", userEntity.getId().toString()); // Users: ID 값(PK값)
 	}
 }
