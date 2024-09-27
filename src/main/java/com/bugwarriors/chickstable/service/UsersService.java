@@ -131,9 +131,17 @@ public class UsersService {
         }
     }
 
+    @Transactional
     public void deleteUsers(UsersEntity users) {
-        usersRepository.delete(users);
-    };
+        // TODO: scrap delete
+        try {
+            diseaseRepository.deleteAllByUsers(users);
+            mediaRepository.deleteByUsers(users);
+            usersRepository.delete(users);
+        } catch (Exception e) {
+            log.error(e.toString());
+        }
+    }
 
     public boolean existsByUserId(String userId) {
         return usersRepository.existsByUserId(userId);

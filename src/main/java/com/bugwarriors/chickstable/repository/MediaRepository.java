@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface MediaRepository extends JpaRepository<MediaEntity, Long> {
     Optional<MediaEntity> findByUsers(UsersEntity users);
+    void deleteByUsers(UsersEntity users);
 }
