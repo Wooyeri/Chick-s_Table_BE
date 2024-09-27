@@ -19,6 +19,7 @@ public class ScrapEntity {
 
     private String title;
 
+    @Column(length = 2000)
     private String contents;
 
     @ManyToOne(fetch = FetchType.LAZY)

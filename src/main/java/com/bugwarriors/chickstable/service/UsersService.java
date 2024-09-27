@@ -11,6 +11,7 @@ import com.bugwarriors.chickstable.entity.MediaEntity;
 import com.bugwarriors.chickstable.entity.UsersEntity;
 import com.bugwarriors.chickstable.repository.DiseaseRepository;
 import com.bugwarriors.chickstable.repository.MediaRepository;
+import com.bugwarriors.chickstable.repository.ScrapRepository;
 import com.bugwarriors.chickstable.repository.UsersRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,9 @@ public class UsersService {
 
     @Autowired
     private DiseaseRepository diseaseRepository;
+
+    @Autowired
+    private ScrapRepository scrapRepository;
 
     @Autowired
     private FileUtilsForS3 fileUtils;
@@ -133,8 +137,8 @@ public class UsersService {
 
     @Transactional
     public void deleteUsers(UsersEntity users) {
-        // TODO: scrap delete
         try {
+            scrapRepository.deleteByUsers(users);
             diseaseRepository.deleteAllByUsers(users);
             mediaRepository.deleteByUsers(users);
             usersRepository.delete(users);
