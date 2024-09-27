@@ -30,8 +30,12 @@ public class UsersInfoController {
             @AuthUser UsersEntity users,
             @PathVariable(value = "id") Long userId
     ) {
+        if (users == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         if (!usersService.existsById(userId)) {
-            return ResponseEntity.badRequest().body("존재하지 않는 회원입니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 회원입니다.");
         }
 
         if (!users.getId().equals(userId)) {
@@ -51,8 +55,12 @@ public class UsersInfoController {
             @RequestPart(value = "data", required = false) UsersInfoRequestDTO requestDto,
             @RequestPart(value = "file", required = false) MultipartFile file
     ) {
+        if (users == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         if (!usersService.existsById(userId)) {
-            return ResponseEntity.badRequest().body("존재하지 않는 회원입니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 회원입니다.");
         }
 
         if (!users.getId().equals(userId)) {
@@ -76,8 +84,12 @@ public class UsersInfoController {
             @PathVariable(value = "id") Long userId,
             @RequestBody ChangePasswordRequestDTO requestDto
     ) {
+        if (users == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         if (!usersService.existsById(userId)) {
-            return ResponseEntity.badRequest().body("존재하지 않는 회원입니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 회원입니다.");
         }
         if (!users.getId().equals(userId)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
