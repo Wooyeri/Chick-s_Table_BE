@@ -3,12 +3,15 @@ package com.bugwarriors.chickstable.configuration;
 import com.bugwarriors.chickstable.security.CustomAuthenticationFailureHandler;
 import com.bugwarriors.chickstable.security.CustomAuthenticationSuccessHandler;
 import com.bugwarriors.chickstable.security.JwtRequestFilter;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -29,6 +32,9 @@ public class SecurityConfiguration {
 	private CustomAuthenticationFailureHandler failureHandler;
 
 	@Autowired
+	private CorsConfigurationSource corsConfigurationSource;
+
+	@Autowired
 	private JwtRequestFilter jwtRequestFilter;
 
 	@Bean
@@ -44,6 +50,15 @@ public class SecurityConfiguration {
 				.successHandler(successHandler)
 				.failureHandler(failureHandler));
 
+		http.cors(corsCustomizer -> corsCustomizer.configurationSource(request -> {
+			CorsConfiguration configuration = new CorsConfiguration();
+			configuration.setAllowedOrigins(List.of("*"));
+			configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
+			configuration.setAllowedHeaders(List.of("*"));
+			configuration.setExposedHeaders(List.of("token", "id"));
+			return configuration;
+		}));
+
 		http.csrf(AbstractHttpConfigurer::disable);
 		
 		http.httpBasic(AbstractHttpConfigurer::disable);
@@ -56,20 +71,6 @@ public class SecurityConfiguration {
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
-	}
-
-	@Bean
-	public CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration configuration = new CorsConfiguration();
-
-		configuration.setAllowedOrigins(List.of("*"));
-		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
-		configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-		configuration.setExposedHeaders(List.of("token", "id"));
-
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", configuration);
-		return source;
 	}
 
 	@Bean
